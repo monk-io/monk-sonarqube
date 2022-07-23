@@ -1,0 +1,31 @@
+namespace: sonarqube-community
+
+stack:
+  defines: process-group
+  runnable-list:
+    - sonarqube-postgresql/database
+    - sonarqube-postgresql/sonarqube
+    - sonarqube-postgresql/nginx
+  variables:
+    defines: variables
+    db-user:
+      type: string
+      value: "sonarqube"
+    db-password:
+      type: string
+      value: "sonarqube"   
+    db-name:
+      type: string
+      value: "sonarqube"
+    nginx-listen-port:
+      type: int
+      value: 8080
+    nginx-image-tag: 
+       type: string
+       value: "latest" 
+    sonarqube-server-name:
+      type: string
+      value: sonarqube.example.com 
+    sonarqube-image-tag:
+      type: string
+      value: lts-community

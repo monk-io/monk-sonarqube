@@ -1,0 +1,115 @@
+namespace: sonarqube-postgresql
+
+database:
+  defines: runnable
+  inherits: postgres/12
+  variables:
+    db-user:
+      value: <- `${db-user}`
+    db-password:
+      value: <- `${db-password}`
+    db-name:
+      value: <- `${db-name}`
+
+
+nginx:
+  defines: runnable
+  inherits: nginx
+  files:
+    server-def:
+      contents: |
+        server {
+            listen 0.0.0.0:{{ v "listen-port" }};
+            return 404;
+        }      
+        server {
+          listen 0.0.0.0:{{ v "listen-port" }};
+          server_name {{ v "server-name" }};
+          location / {
+            proxy_set_header X-Real-IP  $remote_addr;
+            proxy_set_header X-Forwarded-For $remote_addr;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header Host $host;
+            proxy_pass http://{{ v "proxy-target-host" }}:{{ v "proxy-target-port" }};
+          }
+        }
+      mode: 511
+      path: /opt/bitnami/nginx/conf/server_blocks/reverse_proxy.conf
+      container: nginx-reverse-proxy
+  containers:
+    defines: containers
+    nginx-reverse-proxy:
+      image-tag: <- `${nginx-image}`
+      image: docker.io/bitnami/nginx
+      ports:
+      - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
+  variables:
+    proxy-target-host:
+      value: <- get-hostname("sonarqube-postgresql/sonarqube", "sonarqube") split(".dns.podman") join("")
+      type: string
+    listen-port:
+      value: <- $nginx-listen-port
+      type: string
+    server-name:
+      value: <- $sonarqube-server-name
+      type: string
+    proxy-target-port:
+      value: "9000"
+      type: string
+    nginx-image:
+      value: <- $nginx-image-tag
+      type: string
+
+
+
+sonarqube:
+  defines: runnable
+  containers:
+    defines: containers
+    sonarqube:
+      image:  sonarqube
+      image-tag: <- `${SONARQUBE_IMAGE}`
+      paths:
+        - <- `${monk-volume-path}/sonarqube/${SONARQUBE_DATA}:/opt/sonarqube/data
+        - <- `${monk-volume-path}/sonarqube/${sonarqube_extensions}:/opt/sonarqube/extensions`
+        - <- `${monk-volume-path}/sonarqube/${sonarqube_logs}:/opt/sonarqube/logs`                       
+      ports:
+        - 9000
+  depends:
+    wait-for:
+      runnables:
+        - sonarqube-postgresql/database
+        - sonarqube-postgresql/nginx
+      timeout: 30
+  variables:
+    defines: variables
+    SONAR_JDBC_URL:
+      env: SONAR_JDBC_URL
+      type: string
+      value: <- `jdbc:postgresql://${db-host}:5432/${db-name}`
+    db-user:
+      env: SONAR_JDBC_USERNAME
+      type: string
+      value: <- `${db-user}`
+    db-password:
+      env: SONAR_JDBC_PASSWORD
+      type: string
+      value: <- `${db-password}`
+    db-name:
+      type: string
+      value: <- `${db-name}`
+    SONARQUBE_DATA:
+      type: string
+      value: "config"
+    SONARQUBE_EXTENSIONS:
+      type: string
+      value: "data"
+    SONARQUBE_LOGS:
+      type: string
+      value: "logs"
+    db-host:
+      type: string
+      value: <- get-hostname("sonarqube-community/database", "postgres") split(".dns.podman") join("")
+    SONARQUBE_IMAGE:
+      type: string
+      value: <- `${sonarqube-image-tag}`      
