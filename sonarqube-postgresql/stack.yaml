@@ -1,4 +1,4 @@
-namespace: sonarqube-community
+namespace: sonarqube-postgresql
 
 stack:
   defines: process-group
@@ -8,13 +8,13 @@ stack:
     - sonarqube-postgresql/nginx
   variables:
     defines: variables
-    db-user:
+    database-user:
       type: string
       value: "sonarqube"
-    db-password:
+    database-password:
       type: string
-      value: "sonarqube"   
-    db-name:
+      value: "password"
+    database-name:
       type: string
       value: "sonarqube"
     nginx-listen-port:

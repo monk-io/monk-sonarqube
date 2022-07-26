@@ -5,12 +5,11 @@ database:
   inherits: postgres/12
   variables:
     db-user:
-      value: <- `${db-user}`
+      value: <- `${database-user}`
     db-password:
-      value: <- `${db-password}`
+      value: <- `${database-password}`
     db-name:
-      value: <- `${db-name}`
-
+      value: <- `${database-name}`
 
 nginx:
   defines: runnable
@@ -43,6 +42,11 @@ nginx:
       image: docker.io/bitnami/nginx
       ports:
       - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
+  depends:
+    wait-for:
+      runnables:
+        - sonarqube-postgresql/sonarqube
+      timeout: 30      
   variables:
     proxy-target-host:
       value: <- get-hostname("sonarqube-postgresql/sonarqube", "sonarqube") split(".dns.podman") join("")
@@ -54,11 +58,11 @@ nginx:
       value: <- $sonarqube-server-name
       type: string
     proxy-target-port:
-      value: "9000"
+      value: "8065"
       type: string
     nginx-image:
       value: <- $nginx-image-tag
-      type: string
+      type: string      
 
 
 
@@ -70,16 +74,15 @@ sonarqube:
       image:  sonarqube
       image-tag: <- `${SONARQUBE_IMAGE}`
       paths:
-        - <- `${monk-volume-path}/sonarqube/${SONARQUBE_DATA}:/opt/sonarqube/data
-        - <- `${monk-volume-path}/sonarqube/${sonarqube_extensions}:/opt/sonarqube/extensions`
-        - <- `${monk-volume-path}/sonarqube/${sonarqube_logs}:/opt/sonarqube/logs`                       
+        - <- `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
+        - <- `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
+        - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`   
       ports:
         - 9000
   depends:
     wait-for:
       runnables:
         - sonarqube-postgresql/database
-        - sonarqube-postgresql/nginx
       timeout: 30
   variables:
     defines: variables
@@ -90,26 +93,17 @@ sonarqube:
     db-user:
       env: SONAR_JDBC_USERNAME
       type: string
-      value: <- `${db-user}`
+      value: <- `${database-user}`
     db-password:
       env: SONAR_JDBC_PASSWORD
       type: string
-      value: <- `${db-password}`
+      value: <- `${database-password}`
     db-name:
       type: string
-      value: <- `${db-name}`
-    SONARQUBE_DATA:
-      type: string
-      value: "config"
-    SONARQUBE_EXTENSIONS:
-      type: string
-      value: "data"
-    SONARQUBE_LOGS:
-      type: string
-      value: "logs"
+      value: <- `${database-name}`
     db-host:
       type: string
       value: <- get-hostname("sonarqube-community/database", "postgres") split(".dns.podman") join("")
     SONARQUBE_IMAGE:
       type: string
-      value: <- `${sonarqube-image-tag}`      
+      value: <- `${sonarqube-image-tag}`
