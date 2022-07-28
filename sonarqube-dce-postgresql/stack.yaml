@@ -1,0 +1,34 @@
+namespace: sonarqube-dce
+
+stack:
+  defines: process-group
+  runnable-list:
+    - sonarqube-dce/database
+    - sonarqube-dce/sonarqube
+    - sonarqube-dce/nginx
+  variables:
+    defines: variables
+    sonarqube-auth-jwtbase645s256secret:
+      type: string
+      value: "dZ0EB0KxnF++nr5+4vfTCaun/eWbv6gOoXodiAMqcFo="    
+    database-user:
+      type: string
+      value: "sonarqube"
+    database-password:
+      type: string
+      value: "password"
+    database-name:
+      type: string
+      value: "sonarqube"
+    nginx-listen-port:
+      type: int
+      value: 8080
+    nginx-image-tag: 
+       type: string
+       value: "latest" 
+    sonarqube-server-name:
+      type: string
+      value: sonarqube.example.com 
+    sonarqube-image-tag:
+      type: string
+      value: datacenter-app

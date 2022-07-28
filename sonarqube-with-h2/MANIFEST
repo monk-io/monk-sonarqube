@@ -1,0 +1,2 @@
+REPO monk-sonarqube
+LOAD sonarqube-with-h2.yaml stack.yaml
