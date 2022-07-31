@@ -1,11 +1,12 @@
-namespace: sonarqube-dce
+namespace: sonarqube-dce-postgresql
 
 stack:
   defines: process-group
   runnable-list:
-    - sonarqube-dce/database
-    - sonarqube-dce/sonarqube
-    - sonarqube-dce/nginx
+    - sonarqube-dce-postgresql/database
+    - sonarqube-dce-postgresql/sonarqube
+    - sonarqube-dce-postgresql/nginx
+    - sonarqube-dce-postgresql/search
   variables:
     defines: variables
     sonarqube-auth-jwtbase645s256secret:
@@ -31,4 +32,4 @@ stack:
       value: sonarqube.example.com 
     sonarqube-image-tag:
       type: string
-      value: datacenter-app
+      value: 9.5.0-datacenter-app

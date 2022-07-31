@@ -1,2 +1,2 @@
 REPO monk-sonarqube
-LOAD sonarqube-postgresql.yaml stack.yaml
+LOAD sonarqube-dce-postgresql.yaml stack.yaml
