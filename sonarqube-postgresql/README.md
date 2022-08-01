@@ -1,4 +1,4 @@
-# Mattermost-enterprise  & Monk
+# sonarqube-postgresql  & Monk
 
 This repository contains Monk.io template to deploy sonarqube-community system either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
@@ -14,14 +14,14 @@ Start `monkd` and login.
 monk login --email=<email> --password=<password>
 ```
 
-## Clone Monk Mattermost-enterprise repository
+## Clone Monk sonarqube-postgresql repository
 
 In order to load templates and change configuration simply use below commands: 
 ```bash
 git clone https://github.com/kaganmersin/monk-mattermost.git
 
-# and change directory to the mattermost-enterprise template folder
-cd mattermost-enterprise
+# and change directory to the sonarqube-postgresql template folder
+cd sonarqube-postgresql
 ```
 
 
@@ -29,56 +29,67 @@ cd mattermost-enterprise
 
 You can add/remove configuration of the template.
 
-The current variables can be found in `mattermost-enterprise/stack/variables` section
+The current variables can be found in `sonarqube-postgresql/stack/variables` section
 
 ```yaml
   variables:
     defines: variables
     database-user:
       type: string
-      value: "mattermost"
+      value: "sonarqube"
     database-password:
       type: string
       value: "password"
     database-name:
       type: string
-      value: "mattermost"
-    TZ:
-      env: TZ
-      type: string
-      value: "UTC"
-    mattermost-server-name:
-      type: string
-      value: mm.example.com
-    mattermost-image-tag: 
-       type: string
-       value: "latest"
+      value: "sonarqube"
     nginx-listen-port:
       type: int
       value: 8080
     nginx-image-tag: 
        type: string
-       value: "latest"        
+       value: "latest" 
+    sonarqube-server-name:
+      type: string
+      value: sonarqube.example.com 
+    sonarqube-image-tag:
+      type: string
+      value: lts-community      
 ```
 
 ##  Template variables
 
 | Variable | Description | Type | Example |
 |----------|-------------|------|---------|
-| **database-user** | Postgresql database username that  used by mattermost | string | mattermost
-| **database-password** | Postgresql database username password that used by mattermost | string | password
-| **database-name** | Postgresql database name that  used by mattermost | string | mattermost
+| **database-user** | Postgresql database username that  used by mattermost | string | sonarqube
+| **database-password** | Postgresql database username password that used by sonarqube | string | password
+| **database-name** | Postgresql database name that  used by mattermost | string | sonarqube
 | **TZ** | Timezone | string | UTC 
-| **mattermost-server-name** | Fqdn that nginx will accept and route to. | string | mm.example.com |
-| **mattermost-image-tag** | Mattermost-preview image version. | string | latest |
+| **sonarqube-server-name** | Fqdn that nginx will accept and route to. | string | sonarqube.example.com |
+| **sonarqube-image-tag** | Mattermost-preview image version. | string | latest |
 | **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 8081 |
-| **nginx-image-tag** | Nginx image version. | string | latest |
+| **nginx-image-tag** | Nginx image version. | string | lts-community |
+
+
+## Docker Host Requirements
+
+Because SonarQube uses an embedded Elasticsearch, make sure that your Docker host configuration complies with the [Elasticsearch production mode requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode) and [File Descriptors configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html).
+
+For example, on Linux, you can set the recommended values for the current session by running the following commands as root on the host:
+
+```bash
+sysctl -w vm.max_map_count=524288
+sysctl -w fs.file-max=131072
+ulimit -n 131072
+ulimit -u 8192
+```
+
 
 
 
 ## Local Deployment
 
-First clone the repository and change the current directory to the /mattermost-enterprise folder and simply run below command after launching `monkd`:
+First clone the repository and change the current directory to the /sonarqube-postgresql folder and simply run below command after launching `monkd`:
 :
 
 ```bash
@@ -86,35 +97,36 @@ First clone the repository and change the current directory to the /mattermost-e
 
 ✨ Loaded:
  ├─🔩 Runnables:
- │  ├─🧩 mattermost-enterprise/mattermost
- │  ├─🧩 mattermost-enterprise/database
- │  └─🧩 mattermost-enterprise/nginx
+ │  ├─🧩 sonarqube-postgresql/database
+ │  ├─🧩 sonarqube-postgresql/nginx
+ │  └─🧩 sonarqube-postgresql/sonarqube
  └─🔗 Process groups:
-    └─🧩 mattermost-enterprise/stack
+    └─🧩 sonarqube-postgresql/stack
 ✔ All templates loaded successfully
 
-➜  monk list mattermost-enterprise
+➜  monk list sonarqube-postgresql
 
 ✔ Got the list
-Type      Template                          Repository             Version      Tags
-runnable  mattermost-enterprise/database    local                  12           dataops, database
-runnable  mattermost-enterprise/mattermost  local                  -            -
-runnable  mattermost-enterprise/nginx       local                  -            -
-group     mattermost-enterprise/stack       local                  -            -
-runnable  nginx/latest                      mattermost-enterprise  -            -
-runnable  nginx/reverse-proxy               mattermost-enterprise  -            -
-runnable  nginx/reverse-proxy-ssl-certbot   mattermost-enterprise  1.15-alpine  nginx, reverse proxy, ssl, certbot
-➜  monk run mattermost-enterprise/stack
+Type      Template                         Repository            Version      Tags
+runnable  nginx/latest                     sonarqube-postgresql  -            -
+runnable  nginx/reverse-proxy              sonarqube-postgresql  -            -
+runnable  nginx/reverse-proxy-ssl-certbot  sonarqube-postgresql  1.15-alpine  -
+runnable  sonarqube-postgresql/database    local                 12           dataops, database
+runnable  sonarqube-postgresql/nginx       local                 -            -
+runnable  sonarqube-postgresql/sonarqube   local                 -            -
+group     sonarqube-postgresql/stack       local                 -            -
+➜  monk run sonarqube-postgresql/stack
 
-✔ Started mattermost-enterprise/stack
-```
-
-This will start the entire mattermost-enterprise/stack  with a Nginx reverse proxy and Postgresql. 
-
-To access mattermost-enterprise from local system, required  dns entry needs to be added in local host file as following format: 
+✔ Started local/sonarqube-postgresql/stack
 
 ```
- 127.0.0.1 <mattermost-server-name>
+
+This will start the entire sonarqube-postgresql/stack  with a Nginx reverse proxy and Postgresql. 
+
+To access sonarqube-postgresql from local system, required  dns entry needs to be added in local host file as following format: 
+
+```
+ 127.0.0.1 <sonarqube-server-name>
 ```
 
 ## Cloud Deployment
@@ -164,57 +176,59 @@ Once cluster is ready execute the same command as for local and select your clus
 
 ✨ Loaded:
  ├─🔩 Runnables:
- │  ├─🧩 mattermost-enterprise/mattermost
- │  ├─🧩 mattermost-enterprise/database
- │  └─🧩 mattermost-enterprise/nginx
+ │  ├─🧩 sonarqube-postgresql/database
+ │  ├─🧩 sonarqube-postgresql/nginx
+ │  └─🧩 sonarqube-postgresql/sonarqube
  └─🔗 Process groups:
-    └─🧩 mattermost-enterprise/stack
+    └─🧩 sonarqube-postgresql/stack
 ✔ All templates loaded successfully
-➜  monk list mattermost-preview
+
+➜  monk list sonarqube-postgresql
 
 ✔ Got the list
-Type      Template                          Repository             Version      Tags
-runnable  mattermost-enterprise/database    local                  12           dataops, database
-runnable  mattermost-enterprise/mattermost  local                  -            -
-runnable  mattermost-enterprise/nginx       local                  -            -
-group     mattermost-enterprise/stack       local                  -            -
-runnable  nginx/latest                      mattermost-enterprise  -            -
-runnable  nginx/reverse-proxy               mattermost-enterprise  -            -
-runnable  nginx/reverse-proxy-ssl-certbot   mattermost-enterprise  1.15-alpine  nginx, reverse proxy, ssl, certbot
+Type      Template                         Repository            Version      Tags
+runnable  nginx/latest                     sonarqube-postgresql  -            -
+runnable  nginx/reverse-proxy              sonarqube-postgresql  -            -
+runnable  nginx/reverse-proxy-ssl-certbot  sonarqube-postgresql  1.15-alpine  -
+runnable  sonarqube-postgresql/database    local                 12           dataops, database
+runnable  sonarqube-postgresql/nginx       local                 -            -
+runnable  sonarqube-postgresql/sonarqube   local                 -            -
+group     sonarqube-postgresql/stack       local                 -            -
+➜  monk run sonarqube-postgresql/stack
 
-➜  monk run mattermost-enterprise/stack
+✔ Started local/sonarqube-postgresql/stack
 
-✔ Started mattermost-enterprise/stack
 ```
+
 ## Logs & Shell
 
 ```bash
 # show Mattermost-preview logs
-➜  monk logs -l 1000 -f mattermost-enterprise/mattermost
+➜  monk logs -l 1000 -f sonarqube-postgresql/sonarqube
 
 # show Nginx logs
-➜  monk logs -l 1000 -f mattermost-enterprise/nginx
+➜  monk logs -l 1000 -f sonarqube-postgresql/nginx
 
 # show Postgresql logs
-➜  monk logs -l 1000 -f mattermost-enterprise/database
+➜  monk logs -l 1000 -f sonarqube-postgresql/database
 
 # access shell in the container running Mattermost
-➜  monk shell mattermost-enterprise/mattermost
+➜  monk shell sonarqube-postgresql/sonarqube
 
 # access shell in the container running Nginx
-➜  monk shell mattermost-enterprise/nginx
+➜  monk shell sonarqube-postgresql/nginx
 
 # access shell in the container running Postgresql
-➜  monk shell mattermost-enterprise/database
+➜  monk shell sonarqube-postgresql/database
 ```
 
 ## Stop, remove and clean up workloads and templates
 
 ```bash
-➜ monk purge -x mattermost-enterprise/stack mattermost-enterprise/mattermost mattermost-enterprise/nginx mattermost-enterprise/database
+➜ monk purge -x sonarqube-postgresql/stack sonarqube-postgresql/sonarqube sonarqube-postgresql/nginx sonarqube-postgresql/database
 
-✔ mattermost-enterprise/stack purged
-✔ mattermost-enterprise/mattermost purged
-✔ mattermost-enterprise/nginx purged
-✔ mattermost-enterprise/database purged
+✔ sonarqube-postgresql/stack purged
+✔ sonarqube-postgresql/sonarqube purged
+✔ sonarqube-postgresql/nginx purged
+✔ sonarqube-postgresql/database purged
 ```
