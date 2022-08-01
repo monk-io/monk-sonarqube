@@ -1,4 +1,4 @@
-# sonarqube-h2  & Monk
+# Sonarqube-h2  & Monk
 
 This repository contains Monk.io template to deploy sonarqube-community system either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
