@@ -1,6 +1,6 @@
 ## Monk - Sonarqube
  
 
-* [Monk-Mattermost Enterprise](https://github.com/kaganmersin/monk-mattermost/tree/main/mattermost-enterprise)
+* [Monk-Sonarqube wih postgresql](https://github.com/kaganmersin/monk-sonarqube/tree/main/sonarqube-postgresql)
 
-* [Monk-Mattermost Preview](https://github.com/kaganmersin/monk-mattermost/tree/main/mattermost-preview)
+* [Monk-Sonarqube wih h2](https://github.com/kaganmersin/monk-sonarqube/tree/main/sonarqube-with-h2)
