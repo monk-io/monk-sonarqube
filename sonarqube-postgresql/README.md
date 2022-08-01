@@ -2,7 +2,7 @@
 
 This repository contains Monk.io template to deploy sonarqube-community system either locally or on cloud of your choice (AWS, GCP, Azure, Digital Ocean).
 
-This template includes Nginx as a reverse proxy and PostgreSQL a sonarqube-community out of box.
+This template includes Nginx as a reverse proxy and PostgreSQL to work with  sonarqube-community out of box.
 
 ## Start
 
@@ -18,7 +18,7 @@ monk login --email=<email> --password=<password>
 
 In order to load templates and change configuration simply use below commands: 
 ```bash
-git clone https://github.com/kaganmersin/monk-mattermost.git
+git clone https://github.com/kaganmersin/monk-sonarqube
 
 # and change directory to the sonarqube-postgresql template folder
 cd sonarqube-postgresql
@@ -64,11 +64,10 @@ The current variables can be found in `sonarqube-postgresql/stack/variables` sec
 | **database-user** | Postgresql database username that  used by mattermost | string | sonarqube
 | **database-password** | Postgresql database username password that used by sonarqube | string | password
 | **database-name** | Postgresql database name that  used by mattermost | string | sonarqube
-| **TZ** | Timezone | string | UTC 
 | **sonarqube-server-name** | Fqdn that nginx will accept and route to. | string | sonarqube.example.com |
-| **sonarqube-image-tag** | Mattermost-preview image version. | string | latest |
-| **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 8081 |
-| **nginx-image-tag** | Nginx image version. | string | lts-community |
+| **sonarqube-image-tag** | Mattermost-preview image version. | string | lts-community |
+| **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 8080 |
+| **nginx-image-tag** | Nginx image version. | string | latest |
 
 
 ## Docker Host Requirements
