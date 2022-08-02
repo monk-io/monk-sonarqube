@@ -60,9 +60,9 @@ The current variables can be found in `sonarqube-h2/stack/variables` section
 | **nginx-image-tag** | Nginx image version. | string | latest |
 
 
-## Docker Host Requirements
+##  Host Requirements
 
-Because SonarQube uses an embedded Elasticsearch, make sure that your Docker host configuration complies with the [Elasticsearch production mode requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode) and [File Descriptors configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html).
+Because SonarQube uses an embedded Elasticsearch, make sure that your Docker or Podman host configuration complies with the [Elasticsearch production mode requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode) and [File Descriptors configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html).
 
 For example, on Linux, you can set the recommended values for the current session by running the following commands as root on the host:
 
