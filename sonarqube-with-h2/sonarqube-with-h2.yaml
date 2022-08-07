@@ -7,11 +7,7 @@ nginx:
   inherits: nginx
   files:
     server-def:
-      contents: |   
-        server {
-            listen 0.0.0.0:{{ v "listen-port" }};
-            return 404;
-        }   
+      contents: |  
         server {
           listen 0.0.0.0:{{ v "listen-port" }};
           server_name {{ v "server-name" }};

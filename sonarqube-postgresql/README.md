@@ -45,7 +45,7 @@ The current variables can be found in `sonarqube-postgresql/stack/variables` sec
       value: "sonarqube"
     nginx-listen-port:
       type: int
-      value: 8080
+      value: 80
     nginx-image-tag: 
        type: string
        value: "latest" 
@@ -66,7 +66,7 @@ The current variables can be found in `sonarqube-postgresql/stack/variables` sec
 | **database-name** | Postgresql database name that  used by mattermost | string | sonarqube
 | **sonarqube-server-name** | Fqdn that nginx will accept and route to. | string | sonarqube.example.com |
 | **sonarqube-image-tag** | Mattermost-preview image version. | string | lts-community |
-| **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 8080 |
+| **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 80 |
 | **nginx-image-tag** | Nginx image version. | string | latest |
 
 
@@ -122,11 +122,6 @@ group     sonarqube-postgresql/stack       local                 -            -
 
 This will start the entire sonarqube-postgresql/stack  with a Nginx reverse proxy and Postgresql. 
 
-To access sonarqube-postgresql from local system, required  dns entry needs to be added in local host file as following format: 
-
-```
- 127.0.0.1 <sonarqube-server-name>
-```
 
 ## Cloud Deployment
 
