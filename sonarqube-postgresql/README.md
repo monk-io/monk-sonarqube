@@ -96,11 +96,13 @@ First clone the repository and change the current directory to the /sonarqube-po
 
 ✨ Loaded:
  ├─🔩 Runnables:
- │  ├─🧩 sonarqube-postgresql/database
  │  ├─🧩 sonarqube-postgresql/nginx
+ │  ├─🧩 sonarqube-postgresql/database
  │  └─🧩 sonarqube-postgresql/sonarqube
- └─🔗 Process groups:
-    └─🧩 sonarqube-postgresql/stack
+ ├─🔗 Process groups:
+ │  └─🧩 sonarqube-postgresql/stack
+ └─⚙️ Entity instances:
+    └─🧩 sonarqube-postgresql/sonarqube/metadata
 ✔ All templates loaded successfully
 
 ➜  monk list sonarqube-postgresql
@@ -170,11 +172,13 @@ Once cluster is ready execute the same command as for local and select your clus
 
 ✨ Loaded:
  ├─🔩 Runnables:
- │  ├─🧩 sonarqube-postgresql/database
  │  ├─🧩 sonarqube-postgresql/nginx
+ │  ├─🧩 sonarqube-postgresql/database
  │  └─🧩 sonarqube-postgresql/sonarqube
- └─🔗 Process groups:
-    └─🧩 sonarqube-postgresql/stack
+ ├─🔗 Process groups:
+ │  └─🧩 sonarqube-postgresql/stack
+ └─⚙️ Entity instances:
+    └─🧩 sonarqube-postgresql/sonarqube/metadata
 ✔ All templates loaded successfully
 
 ➜  monk list sonarqube-postgresql

@@ -86,10 +86,12 @@ First clone the repository and change the current directory to the /sonarqube-h2
 
 ✨ Loaded:
  ├─🔩 Runnables:
- │  ├─🧩 sonarqube-h2/nginx
- │  └─🧩 sonarqube-h2/sonarqube
- └─🔗 Process groups:
-    └─🧩 sonarqube-h2/stack
+ │  ├─🧩 sonarqube-h2/sonarqube
+ │  └─🧩 sonarqube-h2/nginx
+ ├─🔗 Process groups:
+ │  └─🧩 sonarqube-h2/stack
+ └─⚙️ Entity instances:
+    └─🧩 sonarqube-h2/sonarqube/metadata
 ✔ All templates loaded successfully
 
 ➜  monk list sonarqube-h2
@@ -159,10 +161,12 @@ Once cluster is ready execute the same command as for local and select your clus
 
 ✨ Loaded:
  ├─🔩 Runnables:
- │  ├─🧩 sonarqube-h2/nginx
- │  └─🧩 sonarqube-h2/sonarqube
- └─🔗 Process groups:
-    └─🧩 sonarqube-h2/stack
+ │  ├─🧩 sonarqube-h2/sonarqube
+ │  └─🧩 sonarqube-h2/nginx
+ ├─🔗 Process groups:
+ │  └─🧩 sonarqube-h2/stack
+ └─⚙️ Entity instances:
+    └─🧩 sonarqube-h2/sonarqube/metadata
 ✔ All templates loaded successfully
 
 ➜  monk list sonarqube-h2
