@@ -67,6 +67,14 @@ nginx:
 
 sonarqube:
   defines: runnable
+  metadata:
+    defines: metadata
+    name: sonarqube
+    description: SonarQube  is an open-source platform developed by SonarSource for continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs, code smells on 17 programming languages.
+    tags: self hosted, code quality, code inspection
+    website: https://www.sonarqube.org/
+    source: https://github.com/SonarSource/sonarqube
+    publisher: "monk.io"  
   containers:
     defines: containers
     sonarqube:
