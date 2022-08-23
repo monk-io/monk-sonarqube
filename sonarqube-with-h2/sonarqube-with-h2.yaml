@@ -63,6 +63,7 @@ sonarqube:
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
     publisher: "monk.io"  
+    icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
   containers:
     defines: containers
     sonarqube:
