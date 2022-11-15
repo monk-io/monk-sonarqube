@@ -20,7 +20,7 @@ monk login --email=<email> --password=<password>
 
 In order to load templates and change configuration simply use below commands: 
 ```bash
-git clone https://github.com/kaganmersin/monk-sonarqube
+git clone https://github.com/monk-io/monk-sonarqube
 
 # and change directory to the sonarqube-h2 template folder
 cd sonarqube-with-h2
