@@ -1,0 +1,2 @@
+REPO sonarqube
+DIR sonarqube-postgresql sonarqube-with-h2
