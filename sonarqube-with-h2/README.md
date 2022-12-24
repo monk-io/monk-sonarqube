@@ -42,9 +42,6 @@ The current variables can be found in `sonarqube-h2/stack/variables` section
     nginx-image-tag: 
        type: string
        value: "latest" 
-    sonarqube-server-name:
-      type: string
-      value: sonarqube.example.com 
     sonarqube-image-tag:
       type: string
       value: lts-community    
@@ -54,7 +51,6 @@ The current variables can be found in `sonarqube-h2/stack/variables` section
 
 | Variable | Description | Type | Example |
 |----------|-------------|------|---------|
-| **sonarqube-server-name** | Fqdn that nginx will accept and route to. | string | sonarqube.example.com |
 | **sonarqube-image-tag** | sonarqube-community  image version. | string | lts-community |
 | **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 80 |
 | **nginx-image-tag** | Nginx image version. | string | latest |

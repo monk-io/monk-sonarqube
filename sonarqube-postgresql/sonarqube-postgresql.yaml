@@ -3,6 +3,11 @@ namespace: sonarqube-postgresql
 database:
   defines: runnable
   inherits: postgres/12
+  services:
+    postgres:
+      container: postgres
+      port: 5432
+      protocol: tcp
   variables:
     db-user:
       value: <- `${database-user}`
@@ -17,18 +22,27 @@ database:
 nginx:
   defines: runnable
   inherits: nginx
+  services:
+    nginx:
+      container: nginx-reverse-proxy
+      port: <- `${listen-port}` to-i
+      protocol: tcp
+      host-port: <- `${listen-port}` to-i
+  connections:
+    sonarqube:
+      runnable: sonarqube-postgresql/sonarqube
+      service: sonarqube       
   files:
     server-def:
       contents: |
         server {
           listen 0.0.0.0:{{ v "listen-port" }};
-          server_name {{ v "server-name" }};
           location / {
             proxy_set_header X-Real-IP  $remote_addr;
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header Host $host;
-            proxy_pass http://{{ v "proxy-target-host" }}:{{ v "proxy-target-port" }};
+            proxy_pass http://{{ v "proxy-target-host" }}:9000;
           }
         }
       mode: 511
@@ -48,16 +62,13 @@ nginx:
       timeout: 30      
   variables:
     proxy-target-host:
-      value: <- get-hostname("sonarqube-postgresql/sonarqube", "sonarqube") split(".dns.podman") join("")
+      value: <- connection-hostname("sonarqube")
       type: string
     listen-port:
       value: <- $nginx-listen-port
       type: string
     server-name:
       value: <- $sonarqube-server-name
-      type: string
-    proxy-target-port:
-      value: "9000"
       type: string
     nginx-image:
       value: <- $nginx-image-tag
@@ -76,6 +87,16 @@ sonarqube:
     source: https://github.com/SonarSource/sonarqube
     publisher: "monk.io"  
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
+  services:
+    sonarqube:
+      container: sonarqube
+      port: 9000
+      protocol: tcp
+      host-port: 9000
+  connections:
+    postgres:
+      runnable: sonarqube-postgresql/database
+      service: postgres      
   containers:
     defines: containers
     sonarqube:
@@ -111,7 +132,7 @@ sonarqube:
       value: <- `${database-name}`
     db-host:
       type: string
-      value: <- get-hostname("sonarqube-postgresql/database", "postgres") split(".dns.podman") join("")
+      value: <- connection-hostname("postgres")
     SONARQUBE_IMAGE:
       type: string
       value: <- `${sonarqube-image-tag}`

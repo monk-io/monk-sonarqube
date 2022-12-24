@@ -23,9 +23,6 @@ stack:
     nginx-image-tag: 
        type: string
        value: "latest" 
-    sonarqube-server-name:
-      type: string
-      value: sonarqube.example.com 
     sonarqube-image-tag:
       type: string
       value: lts-community

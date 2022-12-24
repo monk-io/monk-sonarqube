@@ -5,18 +5,27 @@ namespace: sonarqube-h2
 nginx:
   defines: runnable
   inherits: nginx
+  services:
+    nginx:
+      container: nginx-reverse-proxy
+      port: <- `${listen-port}` to-i
+      protocol: tcp
+      host-port: <- `${listen-port}` to-i
+  connections:
+    sonarqube:
+      runnable: sonarqube-h2/sonarqube
+      service: sonarqube    
   files:
     server-def:
       contents: |  
         server {
           listen 0.0.0.0:{{ v "listen-port" }};
-          server_name {{ v "server-name" }};
           location / {
             proxy_set_header X-Real-IP  $remote_addr;
             proxy_set_header X-Forwarded-For $remote_addr;
             proxy_set_header X-Forwarded-Proto $scheme;
             proxy_set_header Host $host;
-            proxy_pass http://{{ v "proxy-target-host" }}:{{ v "proxy-target-port" }};
+            proxy_pass http://{{ v "proxy-target-host" }}:9000;
           }
         }
       mode: 511
@@ -44,9 +53,6 @@ nginx:
     server-name:
       value: <- $sonarqube-server-name
       type: string
-    proxy-target-port:
-      value: "9000"
-      type: string
     nginx-image:
       value: <- $nginx-image-tag
       type: string      
@@ -64,6 +70,12 @@ sonarqube:
     source: https://github.com/SonarSource/sonarqube
     publisher: "monk.io"  
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
+  services:
+    sonarqube:
+      container: sonarqube
+      port: 9000
+      protocol: tcp
+      host-port: 9000    
   containers:
     defines: containers
     sonarqube:
