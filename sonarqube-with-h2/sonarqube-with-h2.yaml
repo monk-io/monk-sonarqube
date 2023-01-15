@@ -47,7 +47,7 @@ nginx:
       timeout: 30      
   variables:
     proxy-target-host:
-      value: <- get-hostname("sonarqube-h2/sonarqube", "sonarqube") split(".dns.podman") join("")
+      value: <- connection-hostname("sonarqube")
       type: string
     listen-port:
       value: <- $nginx-listen-port
