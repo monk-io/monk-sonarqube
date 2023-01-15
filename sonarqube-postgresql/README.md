@@ -218,7 +218,7 @@ group     sonarqube-postgresql/stack       local                 -            -
 ## Stop, remove and clean up workloads and templates
 
 ```bash
-➜ monk purge -x sonarqube-postgresql/stack sonarqube-postgresql/sonarqube sonarqube-postgresql/nginx sonarqube-postgresql/database
+➜ monk purge --ii --rv --rs --no-confirm --rv --rs sonarqube-postgresql/sonarqube sonarqube-postgresql/nginx sonarqube-postgresql/database sonarqube-postgresql/stack
 
 ✔ sonarqube-postgresql/stack purged
 ✔ sonarqube-postgresql/sonarqube purged

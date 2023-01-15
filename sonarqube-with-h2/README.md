@@ -190,26 +190,19 @@ group     sonarqube-h2/stack               local         -            -
 # show Nginx logs
 ➜  monk logs -l 1000 -f sonarqube-h2/nginx
 
-# show Postgresql logs
-➜  monk logs -l 1000 -f sonarqube-h2/database
-
 # access shell in the container running Mattermost
 ➜  monk shell sonarqube-h2/sonarqube
 
 # access shell in the container running Nginx
 ➜  monk shell sonarqube-h2/nginx
-
-# access shell in the container running Postgresql
-➜  monk shell sonarqube-h2/database
 ```
 
 ## Stop, remove and clean up workloads and templates
 
 ```bash
-➜ monk purge -x sonarqube-h2/stack sonarqube-h2/sonarqube sonarqube-h2/nginx sonarqube-h2/database
+➜ monk purge --ii --rv --rs --no-confirm --rv --rs  sonarqube-h2/nginx  sonarqube-h2/sonarqube sonarqube-h2/stack
 
-✔ sonarqube-h2/stack purged
-✔ sonarqube-h2/sonarqube purged
 ✔ sonarqube-h2/nginx purged
-✔ sonarqube-h2/database purged
+✔ sonarqube-h2/sonarqube purged
+✔ sonarqube-h2/stack purged
 ```
