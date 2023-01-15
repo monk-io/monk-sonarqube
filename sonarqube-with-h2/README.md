@@ -74,7 +74,7 @@ ulimit -u 8192
 
 ## Local Deployment
 
-First clone the repository and change the current directory to the /sonarqube-h2 folder and simply run below command after launching `monkd`
+First clone the repository and change the current directory to the /sonarqube-h2 folder and simply run below command after launching
 :
 
 ```bash
