@@ -1,23 +1,29 @@
+---
 namespace: sonarqube-postgresql
 
 database:
   defines: runnable
-  inherits: postgres/12
+  inherits: postgresql/db
   services:
     postgres:
       container: postgres
       port: 5432
       protocol: tcp
   variables:
-    db-user:
-      value: <- `${database-user}`
-    db-password:
+    postgres_password:
       value: <- `${database-password}`
-    db-name:
+      type: string
+    db_username:
+      value: <- `${database-user}`
+      type: string
+    db_name:
       value: <- `${database-name}`
-
-
-
+      type: string
+  checks:
+    readiness:
+      code: exec("postgres", "pg_isready") "accepting connections" contains?
+      period: 15
+      initialDelay: 15
 
 nginx:
   defines: runnable
@@ -31,7 +37,7 @@ nginx:
   connections:
     sonarqube:
       runnable: sonarqube-postgresql/sonarqube
-      service: sonarqube       
+      service: sonarqube
   files:
     server-def:
       contents: |
@@ -49,19 +55,18 @@ nginx:
       path: /opt/bitnami/nginx/conf/server_blocks/reverse_proxy.conf
       container: nginx-reverse-proxy
   containers:
-    defines: containers
     nginx-reverse-proxy:
       image-tag: <- `${nginx-image}`
       image: docker.io/bitnami/nginx
       ports:
-      - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
+        - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
       cap-add:
-        - CAP_NET_BIND_SERVICE       
+        - CAP_NET_BIND_SERVICE
   depends:
     wait-for:
       runnables:
         - sonarqube-postgresql/sonarqube
-      timeout: 30      
+      timeout: 30
   variables:
     proxy-target-host:
       value: <- connection-hostname("sonarqube")
@@ -74,20 +79,17 @@ nginx:
       type: string
     nginx-image:
       value: <- $nginx-image-tag
-      type: string      
-
-
+      type: string
 
 sonarqube:
   defines: runnable
   metadata:
-    defines: metadata
     name: sonarqube
     description: SonarQube  is an open-source platform developed by SonarSource for continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs, code smells on 17 programming languages.
     tags: self hosted, code quality, code inspection
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
-    publisher: "monk.io"  
+    publisher: monk.io
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
   services:
     sonarqube:
@@ -98,16 +100,15 @@ sonarqube:
   connections:
     postgres:
       runnable: sonarqube-postgresql/database
-      service: postgres      
+      service: postgres
   containers:
-    defines: containers
     sonarqube:
-      image:  sonarqube
+      image: sonarqube
       image-tag: <- `${SONARQUBE_IMAGE}`
       paths:
         - <- `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
         - <- `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
-        - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`   
+        - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`
       ports:
         - 9000
   depends:
@@ -116,7 +117,6 @@ sonarqube:
         - sonarqube-postgresql/database
       timeout: 30
   variables:
-    defines: variables
     SONAR_JDBC_URL:
       env: SONAR_JDBC_URL
       type: string
