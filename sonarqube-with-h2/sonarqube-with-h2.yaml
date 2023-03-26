@@ -1,6 +1,5 @@
+---
 namespace: sonarqube-h2
-
-
 
 nginx:
   defines: runnable
@@ -14,10 +13,10 @@ nginx:
   connections:
     sonarqube:
       runnable: sonarqube-h2/sonarqube
-      service: sonarqube    
+      service: sonarqube
   files:
     server-def:
-      contents: |  
+      contents: |
         server {
           listen 0.0.0.0:{{ v "listen-port" }};
           location / {
@@ -37,14 +36,14 @@ nginx:
       image-tag: <- `${nginx-image}`
       image: docker.io/bitnami/nginx
       ports:
-      - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
+        - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
       cap-add:
-        - CAP_NET_BIND_SERVICE      
+        - CAP_NET_BIND_SERVICE
   depends:
     wait-for:
       runnables:
         - sonarqube-h2/sonarqube
-      timeout: 30      
+      timeout: 30
   variables:
     proxy-target-host:
       value: <- connection-hostname("sonarqube")
@@ -57,9 +56,7 @@ nginx:
       type: string
     nginx-image:
       value: <- $nginx-image-tag
-      type: string      
-
-
+      type: string
 
 sonarqube:
   defines: runnable
@@ -70,23 +67,23 @@ sonarqube:
     tags: self hosted, code quality, code inspection
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
-    publisher: "monk.io"  
+    publisher: monk.io
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
   services:
     sonarqube:
       container: sonarqube
       port: 9000
       protocol: tcp
-      host-port: 9000    
+      host-port: 9000
   containers:
     defines: containers
     sonarqube:
-      image:  sonarqube
+      image: sonarqube
       image-tag: <- `${SONARQUBE_IMAGE}`
       paths:
         - <- `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
         - <- `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
-        - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`   
+        - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`
       ports:
         - 9000
   variables:
