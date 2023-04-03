@@ -7,7 +7,6 @@ stack:
     - sonarqube-postgresql/database
     - sonarqube-postgresql/sonarqube
     - sonarqube-postgresql/nginx
-    - sonarqube-postgresql/alpine
   variables:
     defines: variables
     database-user:

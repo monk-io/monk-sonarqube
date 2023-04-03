@@ -6,7 +6,7 @@ This template includes Nginx as a reverse proxy and PostgreSQL to work with  son
 
 ## Start
 
-Set up Monk - https://docs.monk.io/docs/monk-in-10/
+Set up Monk - [https://docs.monk.io/docs/monk-in-10/](https://docs.monk.io/docs/monk-in-10/)
 
 Start `monkd` and login.
 
@@ -16,14 +16,14 @@ monk login --email=<email> --password=<password>
 
 ## Clone Monk sonarqube-postgresql repository
 
-In order to load templates and change configuration simply use below commands: 
+In order to load templates and change configuration simply use below commands:
+
 ```bash
 git clone https://github.com/monk-io/monk-sonarqube
 
 # and change directory to the sonarqube-postgresql template folder
 cd sonarqube-postgresql
 ```
-
 
 ## Configuration
 
@@ -53,19 +53,18 @@ The current variables can be found in `sonarqube-postgresql/stack/variables` sec
       value: lts-community      
 ```
 
-##  Template variables
+## Template variables
 
-| Variable | Description | Type | Example |
-|----------|-------------|------|---------|
-| **database-user** | Postgresql database username that  used by mattermost | string | sonarqube
-| **database-password** | Postgresql database username password that used by sonarqube | string | password
-| **database-name** | Postgresql database name that  used by mattermost | string | sonarqube
-| **sonarqube-image-tag** | Mattermost-preview image version. | string | lts-community |
-| **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 80 |
-| **nginx-image-tag** | Nginx image version. | string | latest |
+| Variable                | Description                                                  | Type   | Example       |
+| ----------------------- | ------------------------------------------------------------ | ------ | ------------- |
+| **database-user**       | Postgresql database username that  used by mattermost        | string | sonarqube     |
+| **database-password**   | Postgresql database username password that used by sonarqube | string | password      |
+| **database-name**       | Postgresql database name that  used by mattermost            | string | sonarqube     |
+| **sonarqube-image-tag** | Mattermost-preview image version.                            | string | lts-community |
+| **nginx-listen-port**   | Configures the ports that the nginx listens on.              | int    | 80            |
+| **nginx-image-tag**     | Nginx image version.                                         | string | latest        |
 
-
-##  Host Requirements
+## Host Requirements
 
 Because SonarQube uses an embedded Elasticsearch, make sure that your Docker or podman host configuration complies with the [Elasticsearch production mode requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode) and [File Descriptors configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html).
 
@@ -78,13 +77,10 @@ ulimit -n 131072
 ulimit -u 8192
 ```
 
-
-
-
 ## Local Deployment
 
-First clone the repository and change the current directory to the /sonarqube-postgresql folder and simply run below command after launching `monkd`:
-:
+| First clone the repository and change the current directory to the /sonarqube-postgresql folder and simply run below command after launching `monkd`: |
+| :---------------------------------------------------------------------------------------------------------------------------------------------------: |
 
 ```bash
 ➜  monk load MANIFEST
@@ -117,8 +113,7 @@ group     sonarqube-postgresql/stack       local                 -            -
 
 ```
 
-This will start the entire sonarqube-postgresql/stack  with a Nginx reverse proxy and Postgresql. 
-
+This will start the entire sonarqube-postgresql/stack  with a Nginx reverse proxy and Postgresql.
 
 ## Cloud Deployment
 
