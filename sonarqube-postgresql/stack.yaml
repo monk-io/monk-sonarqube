@@ -3,13 +3,28 @@ namespace: sonarqube-postgresql
 
 stack:
   defines: process-group
+  metadata:
+    name: SonarQube
+    shortname: SonarQube
+    description: |
+      SonarQube is a powerful and comprehensive platform for managing code quality. It provides a suite of tools and features for performing static code analysis, continuous code inspection, and ensuring code security, maintainability, and reliability. With SonarQube, developers can easily detect and fix code issues such as bugs, code smells, and security vulnerabilities, improving the overall quality of their codebase.
+
+      SonarQube provides a range of metrics and indicators for measuring code quality, including code coverage, technical debt, and maintainability. It also offers a Quality Gate feature which enables developers to define quality criteria that must be met before new code can be integrated into the main codebase, ensuring that only high-quality code is released into production.
+
+      SonarQube seamlessly integrates with popular development tools such as Jenkins, GitLab, and GitHub, making it easy to incorporate code quality checks into existing workflows. It also provides automated testing and vulnerability detection features, further enhancing the reliability and security of the code.
+
+      Overall, SonarQube is an essential tool for developers looking to improve the quality of their code, adopt best practices, and ensure that their code meets the highest standards of reliability and security.
+    tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
+    website: https://www.sonarqube.org/
+    source: https://github.com/SonarSource/sonarqube
+    publisher: monk.io
+    icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
+    version: 1.0
   runnable-list:
     - sonarqube-postgresql/database
     - sonarqube-postgresql/sonarqube
     - sonarqube-postgresql/nginx
-    - sonarqube-postgresql/alpine
   variables:
-    defines: variables
     database-user:
       type: string
       value: sonarqube

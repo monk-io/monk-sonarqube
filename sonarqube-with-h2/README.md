@@ -4,11 +4,9 @@ This repository contains Monk.io template to deploy sonarqube-community system e
 
 This template includes Nginx as a reverse proxy to work with sonarqube-community out of box. This template uses an embedded H2 database that is not suited for production.
 
-
-
 ## Start
 
-Set up Monk - https://docs.monk.io/docs/monk-in-10/
+Set up Monk - [https://docs.monk.io/docs/monk-in-10/](https://docs.monk.io/docs/monk-in-10/)
 
 Start `monkd` and login.
 
@@ -18,14 +16,14 @@ monk login --email=<email> --password=<password>
 
 ## Clone Monk sonarqube-h2 repository
 
-In order to load templates and change configuration simply use below commands: 
+In order to load templates and change configuration simply use below commands:
+
 ```bash
 git clone https://github.com/monk-io/monk-sonarqube
 
 # and change directory to the sonarqube-h2 template folder
 cd sonarqube-with-h2
 ```
-
 
 ## Configuration
 
@@ -47,16 +45,15 @@ The current variables can be found in `sonarqube-h2/stack/variables` section
       value: lts-community    
 ```
 
-##  Template variables
+## Template variables
 
-| Variable | Description | Type | Example |
-|----------|-------------|------|---------|
-| **sonarqube-image-tag** | sonarqube-community  image version. | string | lts-community |
-| **nginx-listen-port** | Configures the ports that the nginx listens on. | int | 80 |
-| **nginx-image-tag** | Nginx image version. | string | latest |
+| Variable                | Description                                     | Type   | Example       |
+| ----------------------- | ----------------------------------------------- | ------ | ------------- |
+| **sonarqube-image-tag** | sonarqube-community  image version.             | string | lts-community |
+| **nginx-listen-port**   | Configures the ports that the nginx listens on. | int    | 80            |
+| **nginx-image-tag**     | Nginx image version.                            | string | latest        |
 
-
-##  Host Requirements
+## Host Requirements
 
 Because SonarQube uses an embedded Elasticsearch, make sure that your Docker or Podman host configuration complies with the [Elasticsearch production mode requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode) and [File Descriptors configuration](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html).
 
@@ -68,9 +65,6 @@ sysctl -w fs.file-max=131072
 ulimit -n 131072
 ulimit -u 8192
 ```
-
-
-
 
 ## Local Deployment
 
@@ -107,7 +101,6 @@ group     sonarqube-h2/stack               local         -            -
 ```
 
 This will start the entire sonarqube-h2/stack  with a Nginx reverse proxy.
-
 
 ## Cloud Deployment
 
