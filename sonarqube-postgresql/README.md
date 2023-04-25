@@ -46,11 +46,12 @@ The current variables can be found in `sonarqube-postgresql/stack/variables` sec
     nginx-listen-port:
       type: int
       value: 80
-    nginx-image-tag:
+    nginx-image-tag: 
        type: string
+       value: latest
     sonarqube-image-tag:
       type: string
-      value: lts-community
+      value: lts-community      
 ```
 
 ## Template variables

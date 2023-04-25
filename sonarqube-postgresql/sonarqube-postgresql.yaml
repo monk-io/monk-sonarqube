@@ -3,9 +3,7 @@ namespace: sonarqube-postgresql
 
 database:
   defines: runnable
-  inherits: postgresql/db
-  metadata:
-    private: true
+  inherits: postgresql/base
   services:
     postgres:
       container: postgres
