@@ -3,13 +3,14 @@ namespace: sonarqube-h2
 
 nginx:
   defines: runnable
-  inherits: nginx
+  metadata:
+    private: true
   services:
     nginx:
       container: nginx-reverse-proxy
-      port: <- `${listen-port}` to-i
+      port: <- `${listen-port}`
       protocol: tcp
-      host-port: <- `${listen-port}` to-i
+      host-port: <- `${listen-port}`
   connections:
     sonarqube:
       runnable: sonarqube-h2/sonarqube
@@ -31,12 +32,9 @@ nginx:
       path: /opt/bitnami/nginx/conf/server_blocks/reverse_proxy.conf
       container: nginx-reverse-proxy
   containers:
-    defines: containers
     nginx-reverse-proxy:
-      image-tag: <- `${nginx-image}`
       image: docker.io/bitnami/nginx
-      ports:
-        - <- `0.0.0.0:${listen-port}:${listen-port}/tcp`
+      image-tag: <- `${nginx-image}`
       cap-add:
         - CAP_NET_BIND_SERVICE
   depends:
@@ -61,14 +59,23 @@ nginx:
 sonarqube:
   defines: runnable
   metadata:
-    defines: metadata
-    name: sonarqube
-    description: SonarQube  is an open-source platform developed by SonarSource for continuous inspection of code quality to perform automatic reviews with static analysis of code to detect bugs, code smells on 17 programming languages.
-    tags: self hosted, code quality, code inspection
+    name: Sonarqube
+    shortname: Sonarqube
+    description: |
+      SonarQube is a powerful and comprehensive platform for managing code quality. It provides a suite of tools and features for performing static code analysis, continuous code inspection, and ensuring code security, maintainability, and reliability. With SonarQube, developers can easily detect and fix code issues such as bugs, code smells, and security vulnerabilities, improving the overall quality of their codebase.
+
+      SonarQube provides a range of metrics and indicators for measuring code quality, including code coverage, technical debt, and maintainability. It also offers a Quality Gate feature which enables developers to define quality criteria that must be met before new code can be integrated into the main codebase, ensuring that only high-quality code is released into production.
+
+      SonarQube seamlessly integrates with popular development tools such as Jenkins, GitLab, and GitHub, making it easy to incorporate code quality checks into existing workflows. It also provides automated testing and vulnerability detection features, further enhancing the reliability and security of the code.
+
+      Overall, SonarQube is an essential tool for developers looking to improve the quality of their code, adopt best practices, and ensure that their code meets the highest standards of reliability and security.
+    tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
     publisher: monk.io
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
+    version: 1.0
+    private: true
   services:
     sonarqube:
       container: sonarqube
@@ -76,7 +83,6 @@ sonarqube:
       protocol: tcp
       host-port: 9000
   containers:
-    defines: containers
     sonarqube:
       image: sonarqube
       image-tag: <- `${SONARQUBE_IMAGE}`
@@ -84,10 +90,7 @@ sonarqube:
         - <- `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
         - <- `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
         - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`
-      ports:
-        - 9000
   variables:
-    defines: variables
     SONARQUBE_IMAGE:
       type: string
       value: <- `${sonarqube-image-tag}`

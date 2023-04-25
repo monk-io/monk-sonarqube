@@ -48,6 +48,7 @@ The current variables can be found in `sonarqube-postgresql/stack/variables` sec
       value: 80
     nginx-image-tag: 
        type: string
+       value: latest
     sonarqube-image-tag:
       type: string
       value: lts-community      
