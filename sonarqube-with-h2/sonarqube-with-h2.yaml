@@ -81,7 +81,6 @@ sonarqube:
       container: sonarqube
       port: 9000
       protocol: tcp
-      host-port: 9000
   containers:
     sonarqube:
       image: sonarqube
