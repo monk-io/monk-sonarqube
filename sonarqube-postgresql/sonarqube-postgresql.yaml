@@ -3,27 +3,30 @@ namespace: sonarqube-postgresql
 
 database:
   defines: runnable
-  inherits: postgresql/base
+  metadata:
+    private: true
   services:
     postgres:
       container: postgres
       port: 5432
       protocol: tcp
+  containers:
+    postgres:
+      image: postgres
+      image-tag: <- `${image_tag}`      
   variables:
-    postgres_password:
-      value: <- `${database-password}`
-      type: string
     db_username:
-      value: <- `${database-user}`
+      value: <- `${database-user}` default("sonarqube")
+      type: string
+    postgres_password:
+      value: <- `${database-password}` default("password")
       type: string
     db_name:
-      value: <- `${database-name}`
+      value: <- `${database-name}` default("sonarqube")
       type: string
-  checks:
-    readiness:
-      code: exec("postgres", "pg_isready") "accepting connections" contains?
-      period: 15
-      initialDelay: 15
+    image_tag:
+      type: string
+      value: <- `${postgres-image-tag}` default("12.2")
 
 nginx:
   defines: runnable
@@ -32,9 +35,9 @@ nginx:
   services:
     nginx:
       container: nginx-reverse-proxy
-      port: <- `${listen-port}` to-i
+      port: <- `${listen-port}`
       protocol: tcp
-      host-port: <- `${listen-port}` to-i
+      host-port: <- `${listen-port}`
   connections:
     sonarqube:
       runnable: sonarqube-postgresql/sonarqube
@@ -71,13 +74,10 @@ nginx:
       value: <- connection-hostname("sonarqube")
       type: string
     listen-port:
-      value: <- $nginx-listen-port
-      type: string
-    server-name:
-      value: <- $sonarqube-server-name
-      type: string
+      value: <- $nginx-listen-port default(80)
+      type: int
     nginx-image:
-      value: <- $nginx-image-tag
+      value: <- $nginx-image-tag default("latest")
       type: string
 
 sonarqube:
@@ -130,17 +130,17 @@ sonarqube:
     db-user:
       env: SONAR_JDBC_USERNAME
       type: string
-      value: <- `${database-user}`
+      value: <- `${database-user}` default("sonarqube")
     db-password:
       env: SONAR_JDBC_PASSWORD
       type: string
-      value: <- `${database-password}`
+      value: <- `${database-password}` default("password")
     db-name:
       type: string
-      value: <- `${database-name}`
+      value: <- `${database-name}` default("sonarqube")
     db-host:
       type: string
       value: <- connection-hostname("postgres")
     SONARQUBE_IMAGE:
       type: string
-      value: <- `${sonarqube-image-tag}`
+      value: <- `${sonarqube-image-tag}` default("lts-community")

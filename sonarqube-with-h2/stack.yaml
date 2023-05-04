@@ -20,6 +20,7 @@ stack:
     publisher: monk.io
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
     version: 1.0
+    private: false
   runnable-list:
     - sonarqube-h2/sonarqube
     - sonarqube-h2/nginx

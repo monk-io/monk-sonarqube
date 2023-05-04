@@ -20,6 +20,7 @@ stack:
     publisher: monk.io
     icon: https://www.sonarqube.org/logos/index/sonarqube-logo.png
     version: 1.0
+    private: false
   runnable-list:
     - sonarqube-postgresql/database
     - sonarqube-postgresql/sonarqube
@@ -43,3 +44,6 @@ stack:
     sonarqube-image-tag:
       type: string
       value: lts-community
+    postgres-image-tag:
+      type: string
+      value: 12.2       
