@@ -14,6 +14,14 @@ stack:
       SonarQube seamlessly integrates with popular development tools such as Jenkins, GitLab, and GitHub, making it easy to incorporate code quality checks into existing workflows. It also provides automated testing and vulnerability detection features, further enhancing the reliability and security of the code.
 
       Overall, SonarQube is an essential tool for developers looking to improve the quality of their code, adopt best practices, and ensure that their code meets the highest standards of reliability and security.
+
+      ---
+
+      Notes:
+
+      Default login/password: admin/admin
+
+      ** Please change upon first login **
     tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
