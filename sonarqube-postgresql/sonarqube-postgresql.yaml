@@ -3,6 +3,7 @@ namespace: sonarqube-postgresql
 
 database:
   defines: runnable
+  inherits: postgresql/base
   metadata:
     private: true
   services:
@@ -12,32 +13,39 @@ database:
       protocol: tcp
   containers:
     postgres:
-      image: postgres
-      image-tag: <- `${image_tag}`      
+      image-tag: <- $image_tag default("12.2")
+      paths:
+        - <- `${monk-volume-path}/sonarqube/postgresql:/var/lib/postgresql/data`
   variables:
     db_username:
-      value: <- `${database-user}` default("sonarqube")
+      env: POSTGRES_USER
+      value: <- $database-user default("sonarqube")
       type: string
     postgres_password:
-      value: <- `${database-password}` default("password")
+      env: POSTGRES_PASSWORD
+      value: <- $database-password default("password")
       type: string
     db_name:
-      value: <- `${database-name}` default("sonarqube")
+      env: POSTGRES_DB
+      value: <- $database-name default("sonarqube")
       type: string
-    image_tag:
-      type: string
-      value: <- `${postgres-image-tag}` default("12.2")
 
 nginx:
   defines: runnable
   metadata:
+    publisher: monk.io
+    tags: Nginx Web Server, Reverse Proxy, Load Balancing, Content Delivery Network (CDN), HTTP Cache, SSL/TLS Encryption, IPv6 Support, Server-side Scripting, High Performance, Low Resource Usage, Open-Source Software, Scalability, Web Acceleration, Web Traffic Management, Dynamic Content Serving, Static Content Serving, High Availability, Security, Optimization, Web Application Firewall
+    icon: https://assets.monk.io/icons/nginx-logo-FF65602A76-seeklogo.com.png
+    version: 1.0
+    website: https://www.nginx.com/
+    source: https://github.com/nginx/nginx
     private: true
   services:
     nginx:
       container: nginx-reverse-proxy
-      port: <- `${listen-port}`
+      port: <- $listen-port
       protocol: tcp
-      host-port: <- `${listen-port}`
+      host-port: <- $listen-port
   connections:
     sonarqube:
       runnable: sonarqube-postgresql/sonarqube
@@ -60,8 +68,8 @@ nginx:
       container: nginx-reverse-proxy
   containers:
     nginx-reverse-proxy:
-      image-tag: <- `${nginx-image}`
       image: docker.io/bitnami/nginx
+      image-tag: <- $nginx-image-tag default("latest")
       cap-add:
         - CAP_NET_BIND_SERVICE
   depends:
@@ -76,9 +84,6 @@ nginx:
     listen-port:
       value: <- $nginx-listen-port default(80)
       type: int
-    nginx-image:
-      value: <- $nginx-image-tag default("latest")
-      type: string
 
 sonarqube:
   defines: runnable
@@ -93,6 +98,14 @@ sonarqube:
       SonarQube seamlessly integrates with popular development tools such as Jenkins, GitLab, and GitHub, making it easy to incorporate code quality checks into existing workflows. It also provides automated testing and vulnerability detection features, further enhancing the reliability and security of the code.
 
       Overall, SonarQube is an essential tool for developers looking to improve the quality of their code, adopt best practices, and ensure that their code meets the highest standards of reliability and security.
+
+      ---
+
+      Notes:
+
+      Default login/password: admin/admin
+
+      ** Please change upon first login **
     tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
@@ -112,7 +125,7 @@ sonarqube:
   containers:
     sonarqube:
       image: sonarqube
-      image-tag: <- `${SONARQUBE_IMAGE}`
+      image-tag: <- $sonarqube-image-tag default("lts-community")
       paths:
         - <- `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
         - <- `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
@@ -126,21 +139,18 @@ sonarqube:
     SONAR_JDBC_URL:
       env: SONAR_JDBC_URL
       type: string
-      value: <- `jdbc:postgresql://${db-host}:5432/${db-name}`
+      value: <- "jdbc:postgresql://" $db-host ":" connection-port("postgres") "/" $db-name concat-all
     db-user:
       env: SONAR_JDBC_USERNAME
       type: string
-      value: <- `${database-user}` default("sonarqube")
+      value: <- $database-user default("sonarqube")
     db-password:
       env: SONAR_JDBC_PASSWORD
       type: string
-      value: <- `${database-password}` default("password")
+      value: <- $database-password default("password")
     db-name:
       type: string
-      value: <- `${database-name}` default("sonarqube")
+      value: <- $database-name default("sonarqube")
     db-host:
       type: string
       value: <- connection-hostname("postgres")
-    SONARQUBE_IMAGE:
-      type: string
-      value: <- `${sonarqube-image-tag}` default("lts-community")
