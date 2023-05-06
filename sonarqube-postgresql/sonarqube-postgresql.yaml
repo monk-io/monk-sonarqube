@@ -13,7 +13,7 @@ database:
       protocol: tcp
   containers:
     postgres:
-      image-tag: <- $postgres-image_tag default("12.2")
+      image-tag: 15
       paths:
         - <- `${monk-volume-path}/sonarqube/postgresql:/var/lib/postgresql/data`
   variables:
