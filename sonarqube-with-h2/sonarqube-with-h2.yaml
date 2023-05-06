@@ -4,6 +4,12 @@ namespace: sonarqube-h2
 nginx:
   defines: runnable
   metadata:
+    publisher: monk.io
+    tags: Nginx Web Server, Reverse Proxy, Load Balancing, Content Delivery Network (CDN), HTTP Cache, SSL/TLS Encryption, IPv6 Support, Server-side Scripting, High Performance, Low Resource Usage, Open-Source Software, Scalability, Web Acceleration, Web Traffic Management, Dynamic Content Serving, Static Content Serving, High Availability, Security, Optimization, Web Application Firewall
+    icon: https://assets.monk.io/icons/nginx-logo-FF65602A76-seeklogo.com.png
+    version: 1.0
+    website: https://www.nginx.com/
+    source: https://github.com/nginx/nginx
     private: true
   services:
     nginx:
@@ -63,6 +69,14 @@ sonarqube:
       SonarQube provides a range of metrics and indicators for measuring code quality, including code coverage, technical debt, and maintainability. It also offers a Quality Gate feature which enables developers to define quality criteria that must be met before new code can be integrated into the main codebase, ensuring that only high-quality code is released into production.
       SonarQube seamlessly integrates with popular development tools such as Jenkins, GitLab, and GitHub, making it easy to incorporate code quality checks into existing workflows. It also provides automated testing and vulnerability detection features, further enhancing the reliability and security of the code.
       Overall, SonarQube is an essential tool for developers looking to improve the quality of their code, adopt best practices, and ensure that their code meets the highest standards of reliability and security.
+
+      ---
+
+      Notes:
+
+      Default login/password: admin/admin
+
+      ** Please change upon first login **
     tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
