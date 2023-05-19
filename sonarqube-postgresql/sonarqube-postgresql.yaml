@@ -154,3 +154,7 @@ sonarqube:
     db-host:
       type: string
       value: <- connection-hostname("postgres")
+    SONAR_SEARCH_JAVAADDITIONALOPTS:
+      env: SONAR_SEARCH_JAVAADDITIONALOPTS
+      type: string
+      value: "-Dnode.store.allow_mmap=false"      
