@@ -5,7 +5,7 @@ nginx:
   defines: runnable
   metadata:
     publisher: monk.io
-    tags: Nginx Web Server, Reverse Proxy, Load Balancing, Content Delivery Network (CDN), HTTP Cache, SSL/TLS Encryption, IPv6 Support, Server-side Scripting, High Performance, Low Resource Usage, Open-Source Software, Scalability, Web Acceleration, Web Traffic Management, Dynamic Content Serving, Static Content Serving, High Availability, Security, Optimization, Web Application Firewall
+    tags: load balancing, dynamic content serving, security, reverse proxy, high performance, ssl/tls encryption, scalability, nginx web server, optimization, ipv6 support, web acceleration, web application firewall, content delivery network, high availability, low resource usage, static content serving, web traffic management, http cache
     icon: https://assets.monk.io/icons/nginx-logo-FF65602A76-seeklogo.com.png
     version: 1.0
     website: https://www.nginx.com/
@@ -77,7 +77,7 @@ sonarqube:
       Default login/password: admin/admin
 
       ** Please change upon first login **
-    tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
+    tags: code review, vulnerability detection, quality gate, automated testing, best practices, code security, technical debt, sonarqube, code quality, static code analysis, continuous code inspection, code maintainability, code coverage, devops
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
     publisher: monk.io

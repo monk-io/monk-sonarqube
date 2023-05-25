@@ -22,7 +22,7 @@ stack:
       Default login/password: admin/admin
 
       ** Please change upon first login **
-    tags: SonarQube, Code Quality, Static Code Analysis, Continuous Code Inspection, Code Security, Code Maintainability, Technical Debt, Code Coverage, Quality Gate, DevOps, Code Review, Software Development, Automated Testing, Vulnerability Detection, Best Practices
+    tags: code review, vulnerability detection, quality gate, automated testing, best practices, code security, technical debt, sonarqube, code quality, static code analysis, continuous code inspection, code maintainability, code coverage, devops
     website: https://www.sonarqube.org/
     source: https://github.com/SonarSource/sonarqube
     publisher: monk.io
