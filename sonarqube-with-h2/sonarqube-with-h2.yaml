@@ -14,9 +14,9 @@ nginx:
   services:
     nginx:
       container: nginx-reverse-proxy
-      port: <- `${listen-port}`
+      port: <- $listen-port
       protocol: tcp
-      host-port: <- `${listen-port}`
+      host-port: <- $listen-port
   connections:
     sonarqube:
       runnable: sonarqube-h2/sonarqube
@@ -40,7 +40,7 @@ nginx:
   containers:
     nginx-reverse-proxy:
       image: docker.io/bitnami/nginx
-      image-tag: <- `${nginx-image}`
+      image-tag: <- $nginx-image
       cap-add:
         - CAP_NET_BIND_SERVICE
   depends:
@@ -92,12 +92,12 @@ sonarqube:
   containers:
     sonarqube:
       image: sonarqube
-      image-tag: <- `${SONARQUBE_IMAGE}`
+      image-tag: <- $sonarqube_image
       paths:
         - <- `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
         - <- `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
         - <- `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`
   variables:
-    SONARQUBE_IMAGE:
+    sonarqube_image:
       type: string
-      value: <- `${sonarqube-image-tag}` default("lts-community")
+      value: <- $sonarqube-image-tag default("lts-community")

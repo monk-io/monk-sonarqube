@@ -3,8 +3,18 @@ namespace: sonarqube-postgresql
 
 database:
   defines: runnable
-  inherits: postgresql/base
   metadata:
+    name: PostgreSQL
+    website: https://www.postgresql.org
+    source: https://github.com/postgres
+    publisher: monk.io
+    icon: https://www.postgresql.org/media/img/about/press/elephant.png
+    tags: frameworks, object-relational, indexing, data types, query optimization, postgresql, security, open-source, mvcc, community
+    description: |
+      PostgreSQL is a powerful open-source object-relational database management system (DBMS) that provides robustness, reliability, and performance to meet the demanding needs of enterprise-level applications. It was first released in 1989 and has since become one of the most popular and widely used relational databases in the world.
+      One of the key features of PostgreSQL is its flexibility, which allows it to be used in a wide range of applications, from small-scale projects to large, complex enterprise systems. It supports a wide range of data types, including arrays, hstore, and JSON, and provides advanced indexing and query optimization features to ensure fast and efficient data retrieval.
+      PostgreSQL also has a strong reputation for data security and integrity, with support for advanced security features like row-level security, data masking, and encryption. It also supports multi-version concurrency control (MVCC), which allows multiple transactions to access and modify data concurrently without interfering with each other.
+      In addition to its powerful features, PostgreSQL has a large and active community of developers and users who contribute to its development and provide support through forums, mailing lists, and other channels. It is available on multiple platforms, including Linux, Windows, and macOS, and can be used with a wide range of programming languages and frameworks, making it a versatile and reliable choice for database management in a wide range of applications.
     private: true
   services:
     postgres:
@@ -13,9 +23,10 @@ database:
       protocol: tcp
   containers:
     postgres:
-      image-tag: "15"
+      image: postgres
+      image-tag: <- $image_tag
       paths:
-        - <- `${monk-volume-path}/sonarqube/postgresql:/var/lib/postgresql/data`
+        - <- `${monk-volume-path}/postgresql:/var/lib/postgresql/data`
   variables:
     db_username:
       env: POSTGRES_USER
@@ -29,6 +40,10 @@ database:
       env: POSTGRES_DB
       value: <- $database-name default("sonarqube")
       type: string
+    image_tag:
+      type: string
+      value: <- $postgres-image-tag default("12.2")      
+      
 
 nginx:
   defines: runnable
