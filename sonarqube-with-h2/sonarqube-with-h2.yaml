@@ -39,7 +39,7 @@ nginx:
       container: nginx-reverse-proxy
   containers:
     nginx-reverse-proxy:
-      image: docker.io/bitnami/nginx
+      image: docker.io/bitnamilegacy/nginx
       image-tag: <- $nginx-image
       cap-add:
         - CAP_NET_BIND_SERVICE
