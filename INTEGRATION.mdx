@@ -1,0 +1,193 @@
+---
+title: SonarQube
+description: Ready-to-run SonarQube container template you can run directly or inherit to integrate continuous code quality inspection into your stack.
+primary_category: devops
+tags: [sonarqube, code-quality, security, template, runnable, static-analysis, testing, ci-cd]
+integration_type: template
+hosting_models: [self-hosted]
+website_url: https://www.sonarqube.org/
+docs_url: https://docs.sonarqube.org/
+publisher: monk.io
+---
+
+## Overview
+
+This template provides a production‑ready SonarQube instance as a Monk runnable. You can:
+
+- Run it directly to get a managed code quality and security platform
+- Inherit it in your own runnable to seamlessly add continuous code inspection to your CI/CD pipeline
+
+SonarQube is a leading platform for continuous inspection of code quality and security. It performs automatic reviews with static analysis to detect bugs, code smells, and security vulnerabilities across 25+ programming languages.
+
+## What this template manages
+
+- SonarQube server container (`sonarqube` image, configurable tag)
+- PostgreSQL database for persistent storage
+- Network service on port 9000 (Web UI and API)
+- Analysis engine and quality gates
+- Persistent volumes for data, extensions, and logs
+
+## Quick start (run directly)
+
+1) Load templates
+
+```bash
+monk load MANIFEST
+```
+
+2) Run SonarQube with database
+
+```bash
+monk run sonarqube/stack
+```
+
+3) Customize credentials (recommended via inheritance)
+
+Running directly uses the defaults defined in this template's `variables`. Secrets added with `monk secrets add` will not affect this runnable unless you inherit it and reference those secrets.
+
+- Preferred: inherit and replace variables with `secret("...")` as shown below.
+- Alternative: fork/clone and edit the `variables` in the YAML files, then `monk load MANIFEST` and run.
+
+Once started, access SonarQube at `http://localhost:9000`. Default credentials: `admin` / `admin` (change immediately!)
+
+## Configuration
+
+Key variables you can customize in this template:
+
+```yaml
+variables:
+  sonarqube-image-tag: "latest"       # SonarQube container image tag
+  sonarqube-port: "9000"              # web UI and API port
+  sonarqube-admin-password: "..."     # admin password
+  postgres-password: "..."            # PostgreSQL password
+  postgres-user: "sonar"              # database user
+  postgres-db: "sonarqube"            # database name
+  sonar-web-javaOpts: "-Xmx512m"      # web server JVM options
+  sonar-ce-javaOpts: "-Xmx512m"       # compute engine JVM options
+```
+
+Data is persisted under `${monk-volume-path}/sonarqube` and `${monk-volume-path}/postgres` on the host.
+
+## Use by inheritance (recommended for CI/CD)
+
+Inherit the SonarQube runnable in your CI/CD pipeline and declare a connection. Example:
+
+```yaml
+namespace: myapp
+quality-gate:
+  defines: runnable
+  inherits: sonarqube/stack
+  variables:
+    sonarqube-admin-password:
+      value: <- secret("sonar-password")
+    postgres-password:
+      value: <- secret("postgres-password")
+ci:
+  defines: runnable
+  containers:
+    ci:
+      image: myorg/ci-runner
+      environment:
+        - SONAR_HOST_URL=http://quality-gate:9000
+        - SONAR_TOKEN=<- secret("sonar-token")
+  connections:
+    sonar:
+      runnable: quality-gate
+      service: sonarqube
+```
+
+Then set the secrets once and run your CI pipeline:
+
+```bash
+monk secrets add -g sonar-password="STRONG_PASSWORD"
+monk secrets add -g postgres-password="STRONG_DB_PASSWORD"
+monk secrets add -g sonar-token="<your-sonar-token>"
+monk run myapp/ci
+```
+
+## Ports and connectivity
+
+- Service: `sonarqube` on TCP port `9000`
+- From other runnables in the same process group, use `connection-hostname("<connection-name>")` to resolve the SonarQube host.
+
+## Persistence and configuration
+
+- SonarQube data: `${monk-volume-path}/sonarqube/data:/opt/sonarqube/data`
+- Extensions: `${monk-volume-path}/sonarqube/extensions:/opt/sonarqube/extensions`
+- Logs: `${monk-volume-path}/sonarqube/logs:/opt/sonarqube/logs`
+- PostgreSQL data: `${monk-volume-path}/postgres:/var/lib/postgresql/data`
+
+## Features
+
+- **Code Quality Analysis**: Detect bugs, code smells, and technical debt
+- **Security Scanning**: Find vulnerabilities and security hotspots
+- **25+ Languages**: Java, JavaScript, TypeScript, Python, C#, Go, PHP, etc.
+- **Quality Gates**: Define pass/fail criteria for builds
+- **Pull Request Decoration**: Automatic PR comments in GitHub, GitLab, etc.
+- **Custom Rules**: Create organization-specific quality standards
+- **Historical Trends**: Track code quality over time
+- **Integration**: Jenkins, GitLab CI, GitHub Actions, Azure DevOps
+
+## CI/CD Integration
+
+Example with Maven:
+
+```bash
+mvn clean verify sonar:sonar \
+  -Dsonar.projectKey=myproject \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=<token>
+```
+
+Example with Docker:
+
+```bash
+docker run --rm \
+  -e SONAR_HOST_URL=http://sonarqube:9000 \
+  -e SONAR_LOGIN=<token> \
+  -v $(pwd):/usr/src \
+  sonarsource/sonar-scanner-cli
+```
+
+## Supported Languages
+
+- Java, JavaScript, TypeScript
+- Python, PHP, C#, VB.NET
+- C, C++, Objective-C
+- Go, Kotlin, Ruby, Scala
+- HTML, CSS, XML
+- And many more...
+
+## Use cases
+
+SonarQube excels at:
+- Continuous code quality monitoring
+- Security vulnerability detection
+- Technical debt management
+- Code review automation
+- Compliance and standards enforcement
+- Developer education on best practices
+
+
+## Related templates
+
+- Integrate with source control (GitLab, GitHub) for automated code analysis
+- Use with artifact repositories (`nexus/`, `artifactory/`) for build integration
+- Combine with CI/CD platforms (Jenkins, GitLab CI) for continuous inspection
+
+## Troubleshooting
+
+- Access SonarQube UI at `http://localhost:9000` (default credentials: `admin` / `admin`)
+- Generate API token: Administration → Security → Users → Tokens
+- Check system health: Administration → System
+- Verify database connection in logs
+- Check logs:
+
+```bash
+monk logs -l 500 -f sonarqube/sonarqube
+```
+
+- If analysis is slow, increase JVM heap size in `sonar-web-javaOpts` and `sonar-ce-javaOpts`
+- Ensure PostgreSQL is running and accessible before starting SonarQube
+- For large projects, allocate more resources (4GB+ RAM recommended)
+- Check Elasticsearch storage requirements for large codebases
